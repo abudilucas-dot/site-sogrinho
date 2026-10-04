@@ -8,3 +8,8 @@
 > Commits you push to the connected branch sync back to Lovable and show up in
 > the editor, so keep the branch in a working state.
 <!-- LOVABLE:END -->
+
+## Project architecture
+
+- Keep the marketing site as one section-based index route because the approved brief requires a single conversion-focused journey.
+- Keep editable business details and WhatsApp configuration centralized in the index route so placeholders can be replaced safely.
