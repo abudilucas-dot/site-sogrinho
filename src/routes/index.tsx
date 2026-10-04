@@ -22,8 +22,8 @@ import { SiteHeader } from "../components/site/SiteHeader";
 import { ProjectGallery, type Project } from "../components/site/ProjectGallery";
 
 const COMPANY_NAME = "Churrasgril";
-const PRIMARY_WHATSAPP = "5544997013253";
-const SECONDARY_WHATSAPP = "5544998899776";
+const PRIMARY_WHATSAPP = "5544998899776";
+const SECONDARY_WHATSAPP = "5544997013253";
 const WHATSAPP_MESSAGE =
   "Olá! Vi o site e gostaria de solicitar um orçamento para um serviço em inox para minha churrasqueira.";
 const whatsappUrl = `https://wa.me/${PRIMARY_WHATSAPP}?text=${encodeURIComponent(WHATSAPP_MESSAGE)}`;
@@ -425,7 +425,7 @@ function Index() {
                   WhatsApp para orçamentos
                 </small>
                 <strong className="mt-2 block font-display text-xl text-dark-foreground">
-                  +55 (44) 99701-3253
+                  +55 (44) 99889-9776
                 </strong>
               </a>
               <a
@@ -439,7 +439,7 @@ function Index() {
                   WhatsApp alternativo
                 </small>
                 <strong className="mt-2 block font-display text-xl text-dark-foreground">
-                  +55 (44) 99889-9776
+                  +55 (44) 99701-3253
                 </strong>
               </a>
               <div className="bg-dark p-6 sm:col-span-2">
