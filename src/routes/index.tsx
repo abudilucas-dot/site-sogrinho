@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useState } from "react";
 import {
   ArrowRight,
   Check,
@@ -113,6 +114,8 @@ const projects: Project[] = [
   },
 ];
 
+type ProjectCategory = "Todos" | "Molduras" | "Churrasqueiras";
+
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
@@ -169,6 +172,12 @@ function SectionIntro({
 }
 
 function Index() {
+  const [selectedCategory, setSelectedCategory] = useState<ProjectCategory>("Todos");
+  const visibleProjects =
+    selectedCategory === "Todos"
+      ? projects
+      : projects.filter((project) => project.category === selectedCategory);
+
   return (
     <div className="overflow-x-hidden bg-background">
       <SiteHeader whatsappUrl={whatsappUrl} companyName={COMPANY_NAME} />
@@ -300,16 +309,29 @@ function Index() {
                 title="Conheça alguns dos nossos trabalhos"
                 text="Cada projeto é desenvolvido para unir resistência, funcionalidade e um acabamento à altura do seu espaço gourmet."
               />
-              <div className="flex flex-wrap gap-2 text-xs font-bold uppercase tracking-[0.12em] text-muted-foreground">
-                <span className="border border-flame bg-flame-muted px-4 py-2 text-flame">
-                  Todos
-                </span>
-                <span className="border border-border px-4 py-2">Molduras</span>
-                <span className="border border-border px-4 py-2">Churrasqueiras</span>
+              <div
+                className="flex flex-wrap gap-2 text-xs font-bold uppercase tracking-[0.12em] text-muted-foreground"
+                aria-label="Filtrar projetos"
+              >
+                {(["Todos", "Molduras", "Churrasqueiras"] as ProjectCategory[]).map((category) => (
+                  <button
+                    key={category}
+                    type="button"
+                    onClick={() => setSelectedCategory(category)}
+                    aria-pressed={selectedCategory === category}
+                    className={`border px-4 py-2 transition-colors ${
+                      selectedCategory === category
+                        ? "border-flame bg-flame-muted text-flame"
+                        : "border-border hover:border-flame hover:text-flame"
+                    }`}
+                  >
+                    {category}
+                  </button>
+                ))}
               </div>
             </div>
             <div className="mt-12">
-              <ProjectGallery projects={projects} />
+              <ProjectGallery projects={visibleProjects} />
             </div>
           </div>
         </section>
