@@ -78,9 +78,13 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Acessórios e Acabamentos em Inox para Churrasqueiras" },
-      { name: "description", content: "Peças e acabamentos em aço inox fabricados sob medida para churrasqueiras." },
-      { name: "author", content: "[NOME DA EMPRESA]" },
+      { title: "Churrasgril | Acessórios em Inox para Churrasqueiras" },
+      {
+        name: "description",
+        content:
+          "Peças e acessórios em aço inox fabricados sob medida para churrasqueiras em Maringá e região.",
+      },
+      { name: "author", content: "Churrasgril" },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
@@ -113,7 +117,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 
 function RootShell({ children }: { children: ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="pt-BR">
       <head>
         <HeadContent />
       </head>
