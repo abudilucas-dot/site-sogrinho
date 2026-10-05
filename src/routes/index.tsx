@@ -18,8 +18,20 @@ import {
   Wrench,
 } from "lucide-react";
 import heroImage from "../assets/churrasqueira-hero.jpg";
-import frameImage from "../assets/projeto-moldura.jpg";
-import grillImage from "../assets/projeto-grelha.jpg";
+import churrasqueiraAbertaImage from "../assets/churrasqueira-aberta.jpeg";
+import churrasqueiraLateralImage from "../assets/churrasqueira-lateral.jpeg";
+import conjuntoPortasImage from "../assets/conjunto-portas-inox.jpeg";
+import grelhaAmplaImage from "../assets/grelha-ampla-inox.jpeg";
+import grelhaEspetosImage from "../assets/grelha-espetos-inox.jpeg";
+import grelhaFrontalImage from "../assets/grelha-frontal-inox.jpeg";
+import logoImage from "../assets/logo-churrasgril.png";
+import portaDuplaImage from "../assets/porta-dupla-inox.jpeg";
+import portaInferiorImage from "../assets/porta-inferior-inox.jpeg";
+import portaSuperiorImage from "../assets/porta-superior-inox.jpeg";
+import videoChurrasqueira from "../assets/video-churrasqueira-inox.mp4";
+import videoDetalhePorta from "../assets/video-detalhe-porta.mp4";
+import videoGrelha from "../assets/video-grelha-inox.mp4";
+import videoPortas from "../assets/video-portas-inox.mp4";
 import workshopImage from "../assets/oficina-inox.jpg";
 import { SiteHeader } from "../components/site/SiteHeader";
 import { ProjectGallery, type Project } from "../components/site/ProjectGallery";
@@ -97,26 +109,89 @@ const benefits = [
 
 const projects: Project[] = [
   {
-    image: frameImage,
-    title: "Moldura com encaixe preciso",
-    category: "Molduras",
-    alt: "Moldura em aço inox instalada em churrasqueira",
+    image: portaDuplaImage,
+    title: "Conjunto de portas em inox",
+    category: "Portas em inox",
+    alt: "Conjunto de duas portas em aço inox instalado em espaço gourmet",
   },
   {
-    image: grillImage,
-    title: "Conjunto gourmet em inox",
+    image: churrasqueiraAbertaImage,
+    title: "Estrutura interna sob medida",
     category: "Churrasqueiras",
-    alt: "Conjunto de grelha e acessórios em aço inox",
+    alt: "Churrasqueira revestida em granito com estrutura interna em aço inox",
   },
   {
-    image: heroImage,
-    title: "Ambiente gourmet completo",
-    category: "Projeto personalizado",
-    alt: "Área gourmet moderna com churrasqueira em inox",
+    image: grelhaEspetosImage,
+    title: "Grelha e conjunto de espetos",
+    category: "Grelhas",
+    alt: "Churrasqueira com grelha e suportes para espetos em aço inox",
+  },
+  {
+    image: portaInferiorImage,
+    title: "Porta inferior com acabamento espelhado",
+    category: "Portas em inox",
+    alt: "Porta inferior em aço inox com acabamento espelhado",
+  },
+  {
+    image: grelhaFrontalImage,
+    title: "Grelha frontal em inox",
+    category: "Grelhas",
+    alt: "Grelha frontal e suporte em aço inox instalados em churrasqueira",
+  },
+  {
+    image: conjuntoPortasImage,
+    title: "Acabamento completo para área gourmet",
+    category: "Portas em inox",
+    alt: "Conjunto vertical com nicho superior e porta inferior em aço inox",
+  },
+  {
+    image: churrasqueiraLateralImage,
+    title: "Churrasqueira integrada ao granito",
+    category: "Churrasqueiras",
+    alt: "Churrasqueira com peças em aço inox integrada à bancada de granito",
+  },
+  {
+    image: portaSuperiorImage,
+    title: "Porta superior sob medida",
+    category: "Portas em inox",
+    alt: "Porta superior de aço inox instalada em parede de área gourmet",
+  },
+  {
+    image: grelhaAmplaImage,
+    title: "Conjunto amplo de grelha e suporte",
+    category: "Grelhas",
+    alt: "Grelha ampla com estrutura de suporte em aço inox",
   },
 ];
 
-type ProjectCategory = "Todos" | "Molduras" | "Churrasqueiras";
+const projectVideos = [
+  {
+    src: videoPortas,
+    poster: portaDuplaImage,
+    title: "Portas em inox instaladas",
+    description: "Veja a abertura, o encaixe e o acabamento das portas produzidas sob medida.",
+  },
+  {
+    src: videoDetalhePorta,
+    poster: portaSuperiorImage,
+    title: "Detalhes do acabamento espelhado",
+    description: "Uma visão de perto do brilho e da precisão do conjunto instalado.",
+  },
+  {
+    src: videoChurrasqueira,
+    poster: churrasqueiraLateralImage,
+    title: "Estrutura interna da churrasqueira",
+    description: "Confira a estrutura, os suportes e o espaço preparado para uso.",
+  },
+  {
+    src: videoGrelha,
+    poster: grelhaFrontalImage,
+    title: "Grelha e suportes em funcionamento",
+    description: "Veja de perto o conjunto de grelha e espetos instalado na churrasqueira.",
+  },
+];
+
+type ProjectCategory = "Todos" | "Portas em inox" | "Churrasqueiras" | "Grelhas";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -223,7 +298,7 @@ function Index() {
         style={{ transform: `scaleX(${scrollProgress})` }}
         aria-hidden="true"
       />
-      <SiteHeader whatsappUrl={whatsappUrl} companyName={COMPANY_NAME} />
+      <SiteHeader whatsappUrl={whatsappUrl} companyName={COMPANY_NAME} logoSrc={logoImage} />
 
       <main>
         <section
@@ -411,7 +486,9 @@ function Index() {
                 aria-label="Filtrar projetos"
                 data-reveal
               >
-                {(["Todos", "Molduras", "Churrasqueiras"] as ProjectCategory[]).map((category) => (
+                {(
+                  ["Todos", "Portas em inox", "Churrasqueiras", "Grelhas"] as ProjectCategory[]
+                ).map((category) => (
                   <button
                     key={category}
                     type="button"
@@ -430,6 +507,44 @@ function Index() {
             </div>
             <div key={selectedCategory} className="gallery-enter mt-12">
               <ProjectGallery projects={visibleProjects} />
+            </div>
+          </div>
+        </section>
+
+        <section className="bg-dark py-24 lg:py-32">
+          <div className="mx-auto max-w-7xl px-5 lg:px-8">
+            <SectionIntro
+              eyebrow="Vídeos reais"
+              title="Veja nossos trabalhos em detalhes"
+              text="Aperte o play para conferir de perto o acabamento, o encaixe e o funcionamento das peças instaladas."
+              light
+            />
+            <div className="reveal-stagger mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+              {projectVideos.map((video) => (
+                <article
+                  key={video.title}
+                  className="overflow-hidden border border-dark-border bg-surface transition-transform hover:-translate-y-2"
+                  data-reveal
+                >
+                  <video
+                    controls
+                    playsInline
+                    preload="metadata"
+                    poster={video.poster}
+                    className="aspect-[9/16] w-full bg-black object-cover"
+                    aria-label={video.title}
+                  >
+                    <source src={video.src} type="video/mp4" />
+                    Seu navegador não suporta a reprodução deste vídeo.
+                  </video>
+                  <div className="p-5">
+                    <h3 className="font-display text-xl font-bold text-dark-foreground">
+                      {video.title}
+                    </h3>
+                    <p className="mt-2 text-sm leading-6 text-dark-muted">{video.description}</p>
+                  </div>
+                </article>
+              ))}
             </div>
           </div>
         </section>
@@ -635,10 +750,14 @@ function Index() {
         <div className="mx-auto flex max-w-7xl flex-col gap-8 px-5 lg:px-8">
           <div className="flex flex-col justify-between gap-6 md:flex-row md:items-center">
             <div>
-              <strong className="font-display text-xl text-dark-foreground">{COMPANY_NAME}</strong>
-              <p className="mt-1 text-sm text-dark-muted">
-                Acessórios e acabamentos em inox para churrasqueiras.
-              </p>
+              <img
+                src={logoImage}
+                alt="Churrasgril — Acessórios para churrasqueiras"
+                width={2048}
+                height={683}
+                loading="lazy"
+                className="h-20 w-auto max-w-[260px] object-contain"
+              />
             </div>
             <nav className="flex flex-wrap gap-x-6 gap-y-3 text-sm text-dark-muted">
               <a href="#inicio">Início</a>

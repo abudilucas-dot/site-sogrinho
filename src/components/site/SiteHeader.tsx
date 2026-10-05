@@ -13,9 +13,11 @@ const links = [
 export function SiteHeader({
   whatsappUrl,
   companyName,
+  logoSrc,
 }: {
   whatsappUrl: string;
   companyName: string;
+  logoSrc: string;
 }) {
   const [open, setOpen] = useState(false);
 
@@ -23,17 +25,13 @@ export function SiteHeader({
     <header className="fixed inset-x-0 top-0 z-50 border-b border-header-border bg-header/95 backdrop-blur-xl">
       <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-5 lg:px-8">
         <a href="#inicio" className="group flex items-center gap-3" aria-label="Ir para o início">
-          <span className="flex size-10 items-center justify-center border border-metal/45 bg-surface font-display text-lg font-extrabold text-metal transition-colors group-hover:border-flame">
-            CG
-          </span>
-          <span className="leading-none">
-            <strong className="block font-display text-sm tracking-wide text-header-foreground">
-              {companyName}
-            </strong>
-            <small className="mt-1 block text-[10px] uppercase tracking-[0.18em] text-header-muted">
-              Inox sob medida
-            </small>
-          </span>
+          <img
+            src={logoSrc}
+            alt={`${companyName} — Acessórios para churrasqueiras`}
+            width={2048}
+            height={683}
+            className="h-14 w-auto max-w-[180px] object-contain transition-transform duration-300 group-hover:scale-[1.03]"
+          />
         </a>
 
         <nav className="hidden items-center gap-7 lg:flex" aria-label="Navegação principal">
