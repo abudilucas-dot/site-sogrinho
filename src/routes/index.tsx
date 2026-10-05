@@ -328,7 +328,7 @@ function Index() {
               {visibleServices.map(({ icon: Icon, title, description, serviceIndex }) => (
                 <article
                   key={title}
-                  className="interactive-card group flex min-h-72 flex-col bg-card p-7 transition-all hover:bg-secondary lg:p-8"
+                  className="interactive-card group flex h-[20.25rem] flex-col bg-card p-7 transition-all hover:bg-secondary lg:p-8"
                 >
                   <div className="mb-10 flex items-start justify-between">
                     <span className="service-icon flex size-11 items-center justify-center border border-border bg-background text-flame transition-all">
@@ -428,7 +428,7 @@ function Index() {
                 ))}
               </div>
             </div>
-            <div key={selectedCategory} className="gallery-enter mt-12" data-reveal>
+            <div key={selectedCategory} className="gallery-enter mt-12">
               <ProjectGallery projects={visibleProjects} />
             </div>
           </div>
