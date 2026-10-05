@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   ArrowRight,
   Check,
@@ -11,6 +11,7 @@ import {
   MapPin,
   MessageCircle,
   Phone,
+  Plus,
   Ruler,
   ShieldCheck,
   Sparkles,
@@ -151,7 +152,7 @@ function SectionIntro({
   light?: boolean;
 }) {
   return (
-    <div className="max-w-3xl">
+    <div className="max-w-3xl" data-reveal>
       <p className="mb-4 flex items-center gap-3 text-xs font-bold uppercase tracking-[0.2em] text-flame">
         <span className="h-px w-8 bg-flame" />
         {eyebrow}
@@ -175,6 +176,7 @@ function SectionIntro({
 function Index() {
   const [servicePage, setServicePage] = useState<0 | 1>(0);
   const [selectedCategory, setSelectedCategory] = useState<ProjectCategory>("Todos");
+  const [scrollProgress, setScrollProgress] = useState(0);
   const servicePages = [services.slice(0, 4), services.slice(4)];
   const visibleServices = servicePages[servicePage].map((service, index) => ({
     ...service,
@@ -185,8 +187,42 @@ function Index() {
       ? projects
       : projects.filter((project) => project.category === selectedCategory);
 
+  useEffect(() => {
+    const updateScrollProgress = () => {
+      const scrollableHeight = document.documentElement.scrollHeight - window.innerHeight;
+      setScrollProgress(scrollableHeight > 0 ? window.scrollY / scrollableHeight : 0);
+    };
+
+    const revealElements = document.querySelectorAll<HTMLElement>("[data-reveal]");
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("is-visible");
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.12 },
+    );
+
+    revealElements.forEach((element) => observer.observe(element));
+    updateScrollProgress();
+    window.addEventListener("scroll", updateScrollProgress, { passive: true });
+
+    return () => {
+      observer.disconnect();
+      window.removeEventListener("scroll", updateScrollProgress);
+    };
+  }, []);
+
   return (
     <div className="overflow-x-hidden bg-background">
+      <div
+        className="fixed inset-x-0 top-0 z-[70] h-1 origin-left bg-flame"
+        style={{ transform: `scaleX(${scrollProgress})` }}
+        aria-hidden="true"
+      />
       <SiteHeader whatsappUrl={whatsappUrl} companyName={COMPANY_NAME} />
 
       <main>
@@ -200,40 +236,40 @@ function Index() {
             width={1536}
             height={1024}
             fetchPriority="high"
-            className="absolute inset-0 h-full w-full object-cover"
+            className="hero-zoom absolute inset-0 h-full w-full object-cover"
           />
           <div className="absolute inset-0 bg-hero-overlay" />
           <div className="relative mx-auto w-full max-w-7xl px-5 pb-14 pt-28 lg:px-8 lg:pb-20 lg:pt-40">
-            <div className="max-w-3xl">
-              <p className="mb-5 flex items-center gap-3 text-xs font-bold uppercase tracking-[0.22em] text-flame-soft">
+            <div className="hero-content max-w-3xl">
+              <p className="hero-item mb-5 flex items-center gap-3 text-xs font-bold uppercase tracking-[0.22em] text-flame-soft">
                 <span className="h-px w-10 bg-flame" />
                 Churrasgril · Maringá e região
               </p>
-              <h1 className="font-display text-5xl font-extrabold leading-[0.94] text-image-foreground sm:text-6xl lg:text-8xl">
+              <h1 className="hero-item font-display text-5xl font-extrabold leading-[0.94] text-image-foreground sm:text-6xl lg:text-8xl">
                 Acabamentos em inox que transformam sua churrasqueira.
               </h1>
-              <p className="mt-6 max-w-2xl text-base leading-7 text-hero-muted sm:text-lg">
+              <p className="hero-item mt-6 max-w-2xl text-base leading-7 text-hero-muted sm:text-lg">
                 Peças e acessórios em aço inox produzidos com qualidade, precisão e acabamento
                 profissional para deixar sua churrasqueira mais bonita, resistente e funcional.
               </p>
-              <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+              <div className="hero-item mt-8 flex flex-col gap-3 sm:flex-row">
                 <a
                   href={whatsappUrl}
                   target="_blank"
                   rel="noreferrer"
-                  className="inline-flex items-center justify-center gap-2 bg-flame px-6 py-4 text-sm font-bold text-flame-foreground transition-colors hover:bg-flame-strong"
+                  className="cta-shine inline-flex items-center justify-center gap-2 overflow-hidden bg-flame px-6 py-4 text-sm font-bold text-flame-foreground transition-all hover:-translate-y-1 hover:bg-flame-strong"
                 >
                   <MessageCircle className="size-5" /> Solicitar orçamento pelo WhatsApp
                 </a>
                 <a
                   href="#servicos"
-                  className="inline-flex items-center justify-center gap-2 border border-image-border bg-image-chip px-6 py-4 text-sm font-bold text-image-foreground backdrop-blur-sm transition-colors hover:bg-image-chip-hover"
+                  className="inline-flex items-center justify-center gap-2 border border-image-border bg-image-chip px-6 py-4 text-sm font-bold text-image-foreground backdrop-blur-sm transition-all hover:-translate-y-1 hover:bg-image-chip-hover"
                 >
                   Conhecer nossos serviços <ArrowRight className="size-4" />
                 </a>
               </div>
             </div>
-            <div className="mt-12 grid grid-cols-2 gap-x-4 gap-y-4 border-t border-image-border pt-6 md:grid-cols-4">
+            <div className="hero-item mt-12 grid grid-cols-2 gap-x-4 gap-y-4 border-t border-image-border pt-6 md:grid-cols-4">
               {[
                 "Fabricação sob medida",
                 "Acabamento profissional",
@@ -259,7 +295,7 @@ function Index() {
               title="Soluções em inox para sua churrasqueira"
               text="Produzimos peças e acabamentos em aço inox para churrasqueiras, buscando sempre um excelente acabamento, resistência e encaixe perfeito para cada projeto."
             />
-            <div className="mt-10 flex items-center justify-between gap-5">
+            <div className="mt-10 flex items-center justify-between gap-5" data-reveal>
               <p className="text-sm font-semibold text-muted-foreground">
                 Página {servicePage + 1} de 2 · Use as setas para ver todos os serviços.
               </p>
@@ -284,18 +320,19 @@ function Index() {
             </div>
             <div
               id="produtos"
-              className={`mt-5 grid scroll-mt-28 grid-cols-1 gap-px overflow-hidden border border-border bg-border ${
+              key={servicePage}
+              className={`service-grid-enter mt-5 grid scroll-mt-28 grid-cols-1 gap-px overflow-hidden border border-border bg-border ${
                 servicePage === 0 ? "sm:grid-cols-2 lg:grid-cols-4" : "sm:grid-cols-3"
               }`}
             >
               {visibleServices.map(({ icon: Icon, title, description, serviceIndex }) => (
                 <article
                   key={title}
-                  className="group min-h-72 bg-card p-7 transition-colors hover:bg-secondary lg:p-8"
+                  className="interactive-card group flex min-h-72 flex-col bg-card p-7 transition-all hover:bg-secondary lg:p-8"
                 >
                   <div className="mb-10 flex items-start justify-between">
-                    <span className="flex size-11 items-center justify-center border border-border bg-background text-flame">
-                      <Icon className="size-5" />
+                    <span className="service-icon flex size-11 items-center justify-center border border-border bg-background text-flame transition-all">
+                      <Icon className="size-5 transition-transform" />
                     </span>
                     <span className="font-display text-sm text-muted-foreground">
                       0{serviceIndex + 1}
@@ -303,6 +340,14 @@ function Index() {
                   </div>
                   <h3 className="font-display text-2xl font-bold text-card-foreground">{title}</h3>
                   <p className="mt-3 text-sm leading-6 text-muted-foreground">{description}</p>
+                  <a
+                    href={`https://wa.me/${PRIMARY_WHATSAPP}?text=${encodeURIComponent(`Olá! Vi o serviço de ${title} no site e gostaria de solicitar um orçamento.`)}`}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="mt-auto inline-flex items-center gap-2 pt-5 text-xs font-bold uppercase tracking-[0.1em] text-flame transition-all hover:gap-3"
+                  >
+                    Pedir orçamento <ArrowRight className="size-4" />
+                  </a>
                 </article>
               ))}
             </div>
@@ -330,9 +375,13 @@ function Index() {
               title="Por que escolher nosso trabalho?"
               light
             />
-            <div className="mt-14 grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="reveal-stagger mt-14 grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
               {benefits.map((benefit, index) => (
-                <article key={benefit.title} className="border-t border-dark-border pt-6">
+                <article
+                  key={benefit.title}
+                  className="benefit-card border-t border-dark-border pt-6 transition-all hover:-translate-y-2 hover:border-flame"
+                  data-reveal
+                >
                   <div className="mb-8 flex items-center justify-between">
                     <CircleCheck className="size-6 text-flame" />
                     <span className="font-display text-4xl font-bold text-dark-number">
@@ -360,6 +409,7 @@ function Index() {
               <div
                 className="flex flex-wrap gap-2 text-xs font-bold uppercase tracking-[0.12em] text-muted-foreground"
                 aria-label="Filtrar projetos"
+                data-reveal
               >
                 {(["Todos", "Molduras", "Churrasqueiras"] as ProjectCategory[]).map((category) => (
                   <button
@@ -378,7 +428,7 @@ function Index() {
                 ))}
               </div>
             </div>
-            <div className="mt-12">
+            <div key={selectedCategory} className="gallery-enter mt-12" data-reveal>
               <ProjectGallery projects={visibleProjects} />
             </div>
           </div>
@@ -387,7 +437,7 @@ function Index() {
         <section className="border-y border-border bg-secondary py-24 lg:py-32">
           <div className="mx-auto max-w-7xl px-5 lg:px-8">
             <SectionIntro eyebrow="Processo simples" title="Do orçamento à peça pronta" />
-            <ol className="mt-14 grid gap-8 lg:grid-cols-4">
+            <ol className="reveal-stagger mt-14 grid gap-8 lg:grid-cols-4">
               {[
                 ["Entre em contato", "Envie uma mensagem pelo WhatsApp."],
                 ["Envie as informações", "Mande fotos, medidas e explique o que precisa."],
@@ -396,7 +446,8 @@ function Index() {
               ].map(([title, description], index) => (
                 <li
                   key={title}
-                  className="relative border-l border-border pl-6 lg:border-l-0 lg:border-t lg:pl-0 lg:pt-8"
+                  className="process-card relative border-l border-border pl-6 transition-transform hover:-translate-y-2 lg:border-l-0 lg:border-t lg:pl-0 lg:pt-8"
+                  data-reveal
                 >
                   <span className="mb-5 flex size-11 items-center justify-center bg-primary font-display text-lg font-bold text-primary-foreground">
                     {index + 1}
@@ -414,21 +465,21 @@ function Index() {
 
         <section id="sobre" className="scroll-mt-20 py-24 lg:py-32">
           <div className="mx-auto grid max-w-7xl items-center gap-12 px-5 lg:grid-cols-2 lg:gap-20 lg:px-8">
-            <div className="relative">
+            <div className="about-image relative overflow-hidden" data-reveal>
               <img
                 src={workshopImage}
                 alt="Profissional trabalhando em uma peça de aço inox"
                 width={1024}
                 height={1024}
                 loading="lazy"
-                className="aspect-[4/5] w-full object-cover"
+                className="aspect-[4/5] w-full object-cover transition-transform duration-700 hover:scale-105"
               />
               <div className="absolute -bottom-5 right-0 bg-flame px-6 py-5 text-flame-foreground sm:right-[-1.25rem]">
                 <ShieldCheck className="mb-2 size-7" />
                 <strong className="block font-display text-xl">Precisão em cada detalhe</strong>
               </div>
             </div>
-            <div>
+            <div data-reveal>
               <SectionIntro
                 eyebrow="Sobre nós"
                 title="Qualidade e cuidado em cada detalhe"
@@ -450,8 +501,55 @@ function Index() {
           </div>
         </section>
 
-        <section className="bg-flame py-20">
-          <div className="mx-auto flex max-w-7xl flex-col items-start justify-between gap-8 px-5 lg:flex-row lg:items-center lg:px-8">
+        <section className="border-y border-border bg-background py-24 lg:py-32">
+          <div className="mx-auto max-w-5xl px-5 lg:px-8">
+            <SectionIntro
+              eyebrow="Dúvidas frequentes"
+              title="Tudo o que você precisa saber"
+              text="Abra uma pergunta para ver a resposta. Se ainda tiver dúvidas, fale diretamente com a gente pelo WhatsApp."
+            />
+            <div className="reveal-stagger mt-12 border-t border-border">
+              {[
+                [
+                  "Como solicito um orçamento?",
+                  "Envie fotos, medidas e uma breve explicação do que você precisa pelo WhatsApp. Assim conseguimos avaliar melhor o projeto.",
+                ],
+                [
+                  "As peças são feitas sob medida?",
+                  "Sim. Cada peça é planejada de acordo com as medidas e as necessidades informadas para o projeto.",
+                ],
+                [
+                  "Quais cidades vocês atendem?",
+                  "Atendemos Maringá, Sarandi, Marialva, Paiçandu, Floresta e Mandaguaçu. Para locais mais distantes, consulte a possibilidade de envio.",
+                ],
+                [
+                  "Quais produtos vocês fabricam?",
+                  "Acessórios em inox, molduras, suporte do fundo, kit granito, forno, lenheiro e gaveta.",
+                ],
+              ].map(([question, answer]) => (
+                <details
+                  key={question}
+                  className="faq-item group border-b border-border"
+                  data-reveal
+                >
+                  <summary className="flex cursor-pointer list-none items-center justify-between gap-6 py-6 font-display text-xl font-bold sm:text-2xl">
+                    {question}
+                    <span className="flex size-9 shrink-0 items-center justify-center border border-border text-flame transition-all group-open:rotate-45 group-open:border-flame group-open:bg-flame group-open:text-flame-foreground">
+                      <Plus className="size-5" />
+                    </span>
+                  </summary>
+                  <p className="max-w-3xl pb-6 text-sm leading-7 text-muted-foreground">{answer}</p>
+                </details>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section className="cta-section bg-flame py-20">
+          <div
+            className="mx-auto flex max-w-7xl flex-col items-start justify-between gap-8 px-5 lg:flex-row lg:items-center lg:px-8"
+            data-reveal
+          >
             <div className="max-w-3xl">
               <p className="mb-3 text-xs font-bold uppercase tracking-[0.2em] text-flame-ink-muted">
                 Seu projeto começa aqui
@@ -468,7 +566,7 @@ function Index() {
               href={whatsappUrl}
               target="_blank"
               rel="noreferrer"
-              className="inline-flex w-full shrink-0 items-center justify-center gap-3 bg-primary px-7 py-5 text-sm font-bold uppercase text-primary-foreground transition-transform hover:-translate-y-1 sm:w-auto"
+              className="cta-shine inline-flex w-full shrink-0 items-center justify-center gap-3 overflow-hidden bg-primary px-7 py-5 text-sm font-bold uppercase text-primary-foreground transition-transform hover:-translate-y-1 sm:w-auto"
             >
               <MessageCircle className="size-5" /> Pedir orçamento pelo WhatsApp
             </a>
@@ -483,12 +581,13 @@ function Index() {
               text="Envie fotos e medidas para receber uma avaliação personalizada da Churrasgril."
               light
             />
-            <div className="mt-12 grid gap-px overflow-hidden border border-dark-border bg-dark-border sm:grid-cols-2">
+            <div className="reveal-stagger mt-12 grid gap-px overflow-hidden border border-dark-border bg-dark-border sm:grid-cols-2">
               <a
                 href={whatsappUrl}
                 target="_blank"
                 rel="noreferrer"
-                className="bg-dark p-6 transition-colors hover:bg-surface"
+                className="contact-card bg-dark p-6 transition-all hover:bg-surface"
+                data-reveal
               >
                 <MessageCircle className="mb-5 size-5 text-flame" />
                 <small className="block text-xs uppercase tracking-[0.15em] text-dark-muted">
@@ -502,7 +601,8 @@ function Index() {
                 href={secondaryWhatsappUrl}
                 target="_blank"
                 rel="noreferrer"
-                className="bg-dark p-6 transition-colors hover:bg-surface"
+                className="contact-card bg-dark p-6 transition-all hover:bg-surface"
+                data-reveal
               >
                 <Phone className="mb-5 size-5 text-flame" />
                 <small className="block text-xs uppercase tracking-[0.15em] text-dark-muted">
@@ -512,7 +612,7 @@ function Index() {
                   +55 (44) 99701-3253
                 </strong>
               </a>
-              <div className="bg-dark p-6 sm:col-span-2">
+              <div className="contact-card bg-dark p-6 sm:col-span-2" data-reveal>
                 <MapPin className="mb-5 size-5 text-flame" />
                 <small className="block text-xs uppercase tracking-[0.15em] text-dark-muted">
                   Região de atendimento
@@ -560,7 +660,7 @@ function Index() {
         href={whatsappUrl}
         target="_blank"
         rel="noreferrer"
-        className="fixed bottom-5 right-5 z-40 flex size-14 items-center justify-center rounded-full bg-whatsapp text-whatsapp-foreground shadow-whatsapp transition-transform hover:scale-105"
+        className="whatsapp-float fixed bottom-5 right-5 z-40 flex size-14 items-center justify-center rounded-full bg-whatsapp text-whatsapp-foreground shadow-whatsapp transition-transform hover:scale-110"
         aria-label="Solicitar orçamento pelo WhatsApp"
       >
         <MessageCircle className="size-6" />
