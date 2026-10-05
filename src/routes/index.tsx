@@ -3,6 +3,7 @@ import { useState } from "react";
 import {
   ArrowRight,
   Check,
+  ChevronLeft,
   ChevronRight,
   CircleCheck,
   Flame,
@@ -172,7 +173,12 @@ function SectionIntro({
 }
 
 function Index() {
+  const [serviceStartIndex, setServiceStartIndex] = useState(0);
   const [selectedCategory, setSelectedCategory] = useState<ProjectCategory>("Todos");
+  const visibleServices = Array.from({ length: 4 }, (_, position) => {
+    const serviceIndex = (serviceStartIndex + position) % services.length;
+    return { ...services[serviceIndex], serviceIndex };
+  });
   const visibleProjects =
     selectedCategory === "Todos"
       ? projects
@@ -252,24 +258,69 @@ function Index() {
               title="Soluções em inox para sua churrasqueira"
               text="Produzimos peças e acabamentos em aço inox para churrasqueiras, buscando sempre um excelente acabamento, resistência e encaixe perfeito para cada projeto."
             />
+            <div className="mt-10 flex items-center justify-between gap-5">
+              <p className="text-sm font-semibold text-muted-foreground">
+                Use as setas para conhecer todos os nossos serviços.
+              </p>
+              <div className="flex shrink-0 gap-2">
+                <button
+                  type="button"
+                  onClick={() =>
+                    setServiceStartIndex((current) =>
+                      current === 0 ? services.length - 1 : current - 1,
+                    )
+                  }
+                  className="flex size-11 items-center justify-center border border-border bg-card text-card-foreground transition-colors hover:border-flame hover:text-flame"
+                  aria-label="Ver serviços anteriores"
+                >
+                  <ChevronLeft className="size-5" />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setServiceStartIndex((current) => (current + 1) % services.length)}
+                  className="flex size-11 items-center justify-center border border-border bg-card text-card-foreground transition-colors hover:border-flame hover:text-flame"
+                  aria-label="Ver próximos serviços"
+                >
+                  <ChevronRight className="size-5" />
+                </button>
+              </div>
+            </div>
             <div
               id="produtos"
-              className="mt-14 grid scroll-mt-28 gap-px overflow-hidden border border-border bg-border sm:grid-cols-2 lg:grid-cols-4"
+              className="mt-5 grid scroll-mt-28 grid-cols-1 gap-px overflow-hidden border border-border bg-border sm:grid-cols-2 lg:grid-cols-4"
             >
-              {services.map(({ icon: Icon, title, description }, index) => (
+              {visibleServices.map(({ icon: Icon, title, description, serviceIndex }, position) => (
                 <article
                   key={title}
-                  className="group bg-card p-7 transition-colors hover:bg-secondary lg:p-8"
+                  className={`group bg-card p-7 transition-colors hover:bg-secondary lg:p-8 ${
+                    position === 1 ? "hidden sm:block" : position > 1 ? "hidden lg:block" : ""
+                  }`}
                 >
                   <div className="mb-10 flex items-start justify-between">
                     <span className="flex size-11 items-center justify-center border border-border bg-background text-flame">
                       <Icon className="size-5" />
                     </span>
-                    <span className="font-display text-sm text-muted-foreground">0{index + 1}</span>
+                    <span className="font-display text-sm text-muted-foreground">
+                      0{serviceIndex + 1}
+                    </span>
                   </div>
                   <h3 className="font-display text-2xl font-bold text-card-foreground">{title}</h3>
                   <p className="mt-3 text-sm leading-6 text-muted-foreground">{description}</p>
                 </article>
+              ))}
+            </div>
+            <div className="mt-5 flex justify-center gap-2" aria-label="Posição dos serviços">
+              {services.map((service, index) => (
+                <button
+                  key={service.title}
+                  type="button"
+                  onClick={() => setServiceStartIndex(index)}
+                  className={`h-2.5 rounded-full transition-all ${
+                    serviceStartIndex === index ? "w-8 bg-flame" : "w-2.5 bg-border hover:bg-flame"
+                  }`}
+                  aria-label={`Começar por ${service.title}`}
+                  aria-pressed={serviceStartIndex === index}
+                />
               ))}
             </div>
           </div>
