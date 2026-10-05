@@ -291,7 +291,7 @@ function Index() {
               {visibleServices.map(({ icon: Icon, title, description, serviceIndex }) => (
                 <article
                   key={title}
-                  className="group bg-card p-7 transition-colors hover:bg-secondary lg:p-8"
+                  className="group min-h-72 bg-card p-7 transition-colors hover:bg-secondary lg:p-8"
                 >
                   <div className="mb-10 flex items-start justify-between">
                     <span className="flex size-11 items-center justify-center border border-border bg-background text-flame">
