@@ -173,12 +173,13 @@ function SectionIntro({
 }
 
 function Index() {
-  const [serviceStartIndex, setServiceStartIndex] = useState(0);
+  const [servicePage, setServicePage] = useState<0 | 1>(0);
   const [selectedCategory, setSelectedCategory] = useState<ProjectCategory>("Todos");
-  const visibleServices = Array.from({ length: 4 }, (_, position) => {
-    const serviceIndex = (serviceStartIndex + position) % services.length;
-    return { ...services[serviceIndex], serviceIndex };
-  });
+  const servicePages = [services.slice(0, 4), services.slice(4)];
+  const visibleServices = servicePages[servicePage].map((service, index) => ({
+    ...service,
+    serviceIndex: servicePage * 4 + index,
+  }));
   const visibleProjects =
     selectedCategory === "Todos"
       ? projects
@@ -260,16 +261,12 @@ function Index() {
             />
             <div className="mt-10 flex items-center justify-between gap-5">
               <p className="text-sm font-semibold text-muted-foreground">
-                Use as setas para conhecer todos os nossos serviços.
+                Página {servicePage + 1} de 2 · Use as setas para ver todos os serviços.
               </p>
               <div className="flex shrink-0 gap-2">
                 <button
                   type="button"
-                  onClick={() =>
-                    setServiceStartIndex((current) =>
-                      current === 0 ? services.length - 1 : current - 1,
-                    )
-                  }
+                  onClick={() => setServicePage((current) => (current === 0 ? 1 : 0))}
                   className="flex size-11 items-center justify-center border border-border bg-card text-card-foreground transition-colors hover:border-flame hover:text-flame"
                   aria-label="Ver serviços anteriores"
                 >
@@ -277,7 +274,7 @@ function Index() {
                 </button>
                 <button
                   type="button"
-                  onClick={() => setServiceStartIndex((current) => (current + 1) % services.length)}
+                  onClick={() => setServicePage((current) => (current === 0 ? 1 : 0))}
                   className="flex size-11 items-center justify-center border border-border bg-card text-card-foreground transition-colors hover:border-flame hover:text-flame"
                   aria-label="Ver próximos serviços"
                 >
@@ -287,14 +284,14 @@ function Index() {
             </div>
             <div
               id="produtos"
-              className="mt-5 grid scroll-mt-28 grid-cols-1 gap-px overflow-hidden border border-border bg-border sm:grid-cols-2 lg:grid-cols-4"
+              className={`mt-5 grid scroll-mt-28 grid-cols-1 gap-px overflow-hidden border border-border bg-border ${
+                servicePage === 0 ? "sm:grid-cols-2 lg:grid-cols-4" : "sm:grid-cols-3"
+              }`}
             >
-              {visibleServices.map(({ icon: Icon, title, description, serviceIndex }, position) => (
+              {visibleServices.map(({ icon: Icon, title, description, serviceIndex }) => (
                 <article
                   key={title}
-                  className={`group bg-card p-7 transition-colors hover:bg-secondary lg:p-8 ${
-                    position === 1 ? "hidden sm:block" : position > 1 ? "hidden lg:block" : ""
-                  }`}
+                  className="group bg-card p-7 transition-colors hover:bg-secondary lg:p-8"
                 >
                   <div className="mb-10 flex items-start justify-between">
                     <span className="flex size-11 items-center justify-center border border-border bg-background text-flame">
@@ -309,17 +306,17 @@ function Index() {
                 </article>
               ))}
             </div>
-            <div className="mt-5 flex justify-center gap-2" aria-label="Posição dos serviços">
-              {services.map((service, index) => (
+            <div className="mt-5 flex justify-center gap-2" aria-label="Página dos serviços">
+              {([0, 1] as const).map((page) => (
                 <button
-                  key={service.title}
+                  key={page}
                   type="button"
-                  onClick={() => setServiceStartIndex(index)}
+                  onClick={() => setServicePage(page)}
                   className={`h-2.5 rounded-full transition-all ${
-                    serviceStartIndex === index ? "w-8 bg-flame" : "w-2.5 bg-border hover:bg-flame"
+                    servicePage === page ? "w-8 bg-flame" : "w-2.5 bg-border hover:bg-flame"
                   }`}
-                  aria-label={`Começar por ${service.title}`}
-                  aria-pressed={serviceStartIndex === index}
+                  aria-label={`Ir para a página ${page + 1} dos serviços`}
+                  aria-pressed={servicePage === page}
                 />
               ))}
             </div>
