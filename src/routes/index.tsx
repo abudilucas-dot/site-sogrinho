@@ -24,7 +24,7 @@ import conjuntoPortasImage from "../assets/conjunto-portas-inox.jpeg";
 import grelhaAmplaImage from "../assets/grelha-ampla-inox.jpeg";
 import grelhaEspetosImage from "../assets/grelha-espetos-inox.jpeg";
 import grelhaFrontalImage from "../assets/grelha-frontal-inox.jpeg";
-import logoImage from "../assets/logo-churrasgril.png";
+import logoImage from "../assets/logo-churrasgril-clean.png";
 import portaDuplaImage from "../assets/porta-dupla-inox.jpeg";
 import portaInferiorImage from "../assets/porta-inferior-inox.jpeg";
 import portaSuperiorImage from "../assets/porta-superior-inox.jpeg";
@@ -167,25 +167,21 @@ const projects: Project[] = [
 const projectVideos = [
   {
     src: videoPortas,
-    poster: portaDuplaImage,
     title: "Portas em inox instaladas",
     description: "Veja a abertura, o encaixe e o acabamento das portas produzidas sob medida.",
   },
   {
     src: videoDetalhePorta,
-    poster: portaSuperiorImage,
     title: "Detalhes do acabamento espelhado",
     description: "Uma visão de perto do brilho e da precisão do conjunto instalado.",
   },
   {
     src: videoChurrasqueira,
-    poster: churrasqueiraLateralImage,
     title: "Estrutura interna da churrasqueira",
     description: "Confira a estrutura, os suportes e o espaço preparado para uso.",
   },
   {
     src: videoGrelha,
-    poster: grelhaFrontalImage,
     title: "Grelha e suportes em funcionamento",
     description: "Veja de perto o conjunto de grelha e espetos instalado na churrasqueira.",
   },
@@ -292,7 +288,7 @@ function Index() {
   }, []);
 
   return (
-    <div className="overflow-x-hidden bg-background">
+    <div className="overflow-x-clip bg-background">
       <div
         className="fixed inset-x-0 top-0 z-[70] h-1 origin-left bg-flame"
         style={{ transform: `scaleX(${scrollProgress})` }}
@@ -303,7 +299,7 @@ function Index() {
       <main>
         <section
           id="inicio"
-          className="relative flex min-h-[92svh] items-end overflow-hidden pt-20"
+          className="relative flex min-h-[calc(100svh-5rem)] items-end overflow-hidden"
         >
           <img
             src={heroImage}
@@ -530,7 +526,6 @@ function Index() {
                     controls
                     playsInline
                     preload="metadata"
-                    poster={video.poster}
                     className="aspect-[9/16] w-full bg-black object-cover"
                     aria-label={video.title}
                   >
