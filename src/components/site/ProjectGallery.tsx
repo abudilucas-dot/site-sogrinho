@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import { Maximize2, X } from "lucide-react";
 
 export type Project = {
@@ -66,39 +67,41 @@ export function ProjectGallery({ projects }: { projects: Project[] }) {
         ))}
       </div>
 
-      {selected && (
-        <div
-          className="fixed inset-0 z-[80] flex items-center justify-center bg-black/95 p-3 backdrop-blur-md sm:p-8"
-          role="dialog"
-          aria-modal="true"
-          aria-label={selected.title}
-          onClick={() => setSelected(null)}
-        >
-          <button
-            type="button"
+      {selected &&
+        createPortal(
+          <div
+            className="fixed inset-0 z-[80] flex items-center justify-center bg-black/95 p-3 backdrop-blur-md sm:p-8"
+            role="dialog"
+            aria-modal="true"
+            aria-label={selected.title}
             onClick={() => setSelected(null)}
-            className="fixed right-4 top-4 z-10 flex size-11 items-center justify-center rounded-full border border-white/20 bg-black/70 text-white backdrop-blur-md transition-colors hover:border-flame hover:bg-flame hover:text-flame-foreground sm:right-6 sm:top-6"
-            aria-label="Fechar imagem"
           >
-            <X className="size-5" />
-          </button>
-          <figure
-            className="flex h-full w-full flex-col items-center justify-center gap-3"
-            onClick={(event) => event.stopPropagation()}
-          >
-            <img
-              src={selected.image}
-              alt={selected.alt}
-              width={1024}
-              height={1024}
-              className="max-h-[calc(100dvh-6.5rem)] max-w-full object-contain shadow-2xl"
-            />
-            <figcaption className="max-w-[calc(100vw-2rem)] truncate text-center text-sm font-semibold text-white/80">
-              {selected.title}
-            </figcaption>
-          </figure>
-        </div>
-      )}
+            <button
+              type="button"
+              onClick={() => setSelected(null)}
+              className="fixed right-4 top-4 z-10 flex size-11 items-center justify-center rounded-full border border-white/20 bg-black/70 text-white backdrop-blur-md transition-colors hover:border-flame hover:bg-flame hover:text-flame-foreground sm:right-6 sm:top-6"
+              aria-label="Fechar imagem"
+            >
+              <X className="size-5" />
+            </button>
+            <figure
+              className="flex h-full w-full flex-col items-center justify-center gap-3"
+              onClick={(event) => event.stopPropagation()}
+            >
+              <img
+                src={selected.image}
+                alt={selected.alt}
+                width={1024}
+                height={1024}
+                className="max-h-[calc(100dvh-6.5rem)] max-w-full object-contain shadow-2xl"
+              />
+              <figcaption className="max-w-[calc(100vw-2rem)] truncate text-center text-sm font-semibold text-white/80">
+                {selected.title}
+              </figcaption>
+            </figure>
+          </div>,
+          document.body,
+        )}
     </>
   );
 }

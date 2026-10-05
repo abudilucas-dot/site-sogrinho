@@ -22,7 +22,7 @@ export function SiteHeader({
   const [open, setOpen] = useState(false);
 
   return (
-    <header className="sticky inset-x-0 top-0 z-50 isolate border-b border-dark-border bg-dark shadow-lg shadow-black/20">
+    <header className="sticky inset-x-0 top-0 z-50 isolate transform-gpu border-b border-dark-border bg-dark shadow-lg shadow-black/20">
       <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-5 lg:px-8">
         <a href="#inicio" className="group flex min-w-0 items-center" aria-label="Ir para o início">
           <img
