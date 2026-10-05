@@ -276,7 +276,8 @@
   transform: rotate(18deg);
   background: linear-gradient(90deg, transparent, oklch(1 0 0 / 0.38), transparent);
   transition: left 0.65s ease;
-  z-index: -1;
+  z-index: 0;
+  pointer-events: none;
 }
 .cta-shine:hover::after {
   left: 115%;
