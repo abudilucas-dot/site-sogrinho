@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import {
   ArrowRight,
   Check,
@@ -789,81 +790,91 @@ function Index() {
         </div>
       </footer>
 
-      {selectedProject && (
-        <div
-          role="dialog"
-          aria-modal="true"
-          aria-label={selectedProject.title}
-          onClick={() => setSelectedProject(null)}
-          style={{
-            position: "fixed",
-            inset: 0,
-            zIndex: 1000,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            padding: "12px",
-            backgroundColor: "rgba(0, 0, 0, 0.96)",
-          }}
-        >
-          <button
-            type="button"
+      {selectedProject &&
+        typeof document !== "undefined" &&
+        createPortal(
+          <div
+            id="photo-lightbox"
+            role="dialog"
+            aria-modal="true"
+            aria-label={selectedProject.title}
             onClick={() => setSelectedProject(null)}
-            aria-label="Fechar imagem"
             style={{
-              position: "absolute",
-              top: "16px",
-              right: "16px",
-              zIndex: 1001,
+              position: "fixed",
+              top: 0,
+              right: 0,
+              bottom: 0,
+              left: 0,
+              width: "100vw",
+              height: "100dvh",
+              minHeight: "100vh",
+              zIndex: 1000,
               display: "flex",
-              alignItems: "center",
-              gap: "8px",
-              minHeight: "44px",
-              padding: "0 14px",
-              border: "1px solid rgba(255,255,255,0.4)",
-              borderRadius: "999px",
-              backgroundColor: "#ffffff",
-              color: "#111111",
-              fontWeight: 700,
-              cursor: "pointer",
-            }}
-          >
-            <X className="size-5" /> Fechar
-          </button>
-          <figure
-            onClick={(event) => event.stopPropagation()}
-            style={{
-              width: "100%",
-              height: "100%",
-              margin: 0,
-              display: "flex",
-              flexDirection: "column",
               alignItems: "center",
               justifyContent: "center",
-              gap: "10px",
+              padding: "12px",
+              backgroundColor: "rgba(0, 0, 0, 0.96)",
             }}
           >
-            <img
-              src={selectedProject.image}
-              alt={selectedProject.alt}
-              width={1024}
-              height={1024}
-              loading="eager"
+            <button
+              type="button"
+              onClick={() => setSelectedProject(null)}
+              aria-label="Fechar imagem"
               style={{
-                display: "block",
-                width: "auto",
-                height: "auto",
-                maxWidth: "calc(100vw - 24px)",
-                maxHeight: "calc(100vh - 104px)",
-                objectFit: "contain",
+                position: "absolute",
+                top: "calc(env(safe-area-inset-top, 0px) + 12px)",
+                right: "calc(env(safe-area-inset-right, 0px) + 12px)",
+                zIndex: 1001,
+                display: "flex",
+                alignItems: "center",
+                gap: "8px",
+                minHeight: "44px",
+                padding: "0 14px",
+                border: "1px solid rgba(255,255,255,0.4)",
+                borderRadius: "999px",
+                backgroundColor: "#ffffff",
+                color: "#111111",
+                fontWeight: 700,
+                cursor: "pointer",
               }}
-            />
-            <figcaption style={{ color: "#ffffff", fontSize: "14px", fontWeight: 600 }}>
-              {selectedProject.title}
-            </figcaption>
-          </figure>
-        </div>
-      )}
+            >
+              <X className="size-5" /> Fechar
+            </button>
+            <figure
+              onClick={(event) => event.stopPropagation()}
+              style={{
+                width: "100%",
+                height: "100%",
+                margin: 0,
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: "10px",
+              }}
+            >
+              <img
+                src={selectedProject.image}
+                alt={selectedProject.alt}
+                width={1024}
+                height={1024}
+                loading="eager"
+                style={{
+                  display: "block",
+                  width: "auto",
+                  height: "auto",
+                  maxWidth: "calc(100vw - 24px)",
+                  maxHeight: "calc(100dvh - 104px)",
+                  objectFit: "contain",
+                }}
+              />
+              <figcaption style={{ color: "#ffffff", fontSize: "14px", fontWeight: 600 }}>
+                {selectedProject.title}
+              </figcaption>
+            </figure>
+          </div>,
+          document.body,
+        )}
 
       <a
         href={whatsappUrl}
