@@ -16,6 +16,7 @@ import {
   ShieldCheck,
   Sparkles,
   Wrench,
+  X,
 } from "lucide-react";
 import heroImage from "../assets/churrasqueira-hero.jpg";
 import churrasqueiraAbertaImage from "../assets/churrasqueira-aberta.jpeg";
@@ -247,6 +248,7 @@ function SectionIntro({
 function Index() {
   const [servicePage, setServicePage] = useState<0 | 1>(0);
   const [selectedCategory, setSelectedCategory] = useState<ProjectCategory>("Todos");
+  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [scrollProgress, setScrollProgress] = useState(0);
   const servicePages = [services.slice(0, 4), services.slice(4)];
   const visibleServices = servicePages[servicePage].map((service, index) => ({
@@ -286,6 +288,23 @@ function Index() {
       window.removeEventListener("scroll", updateScrollProgress);
     };
   }, []);
+
+  useEffect(() => {
+    if (!selectedProject) return;
+
+    const previousOverflow = document.body.style.overflow;
+    const closeWithEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setSelectedProject(null);
+    };
+
+    document.body.style.overflow = "hidden";
+    window.addEventListener("keydown", closeWithEscape);
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener("keydown", closeWithEscape);
+    };
+  }, [selectedProject]);
 
   return (
     <div className="overflow-x-clip bg-background">
@@ -502,7 +521,7 @@ function Index() {
               </div>
             </div>
             <div key={selectedCategory} className="gallery-enter mt-12">
-              <ProjectGallery projects={visibleProjects} />
+              <ProjectGallery projects={visibleProjects} onSelect={setSelectedProject} />
             </div>
           </div>
         </section>
@@ -769,6 +788,82 @@ function Index() {
           </div>
         </div>
       </footer>
+
+      {selectedProject && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-label={selectedProject.title}
+          onClick={() => setSelectedProject(null)}
+          style={{
+            position: "fixed",
+            inset: 0,
+            zIndex: 1000,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            padding: "12px",
+            backgroundColor: "rgba(0, 0, 0, 0.96)",
+          }}
+        >
+          <button
+            type="button"
+            onClick={() => setSelectedProject(null)}
+            aria-label="Fechar imagem"
+            style={{
+              position: "absolute",
+              top: "16px",
+              right: "16px",
+              zIndex: 1001,
+              display: "flex",
+              alignItems: "center",
+              gap: "8px",
+              minHeight: "44px",
+              padding: "0 14px",
+              border: "1px solid rgba(255,255,255,0.4)",
+              borderRadius: "999px",
+              backgroundColor: "#ffffff",
+              color: "#111111",
+              fontWeight: 700,
+              cursor: "pointer",
+            }}
+          >
+            <X className="size-5" /> Fechar
+          </button>
+          <figure
+            onClick={(event) => event.stopPropagation()}
+            style={{
+              width: "100%",
+              height: "100%",
+              margin: 0,
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: "10px",
+            }}
+          >
+            <img
+              src={selectedProject.image}
+              alt={selectedProject.alt}
+              width={1024}
+              height={1024}
+              loading="eager"
+              style={{
+                display: "block",
+                width: "auto",
+                height: "auto",
+                maxWidth: "calc(100vw - 24px)",
+                maxHeight: "calc(100vh - 104px)",
+                objectFit: "contain",
+              }}
+            />
+            <figcaption style={{ color: "#ffffff", fontSize: "14px", fontWeight: 600 }}>
+              {selectedProject.title}
+            </figcaption>
+          </figure>
+        </div>
+      )}
 
       <a
         href={whatsappUrl}

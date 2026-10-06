@@ -22,7 +22,15 @@ export function SiteHeader({
   const [open, setOpen] = useState(false);
 
   return (
-    <header className="sticky inset-x-0 top-0 z-50 isolate transform-gpu border-b border-dark-border bg-dark shadow-lg shadow-black/20">
+    <header
+      className="sticky inset-x-0 top-0 z-50 isolate border-b shadow-lg"
+      style={{
+        backgroundColor: "#080a0e",
+        borderColor: "rgba(255,255,255,0.14)",
+        color: "#ffffff",
+        transform: "translateZ(0)",
+      }}
+    >
       <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-5 lg:px-8">
         <a href="#inicio" className="group flex min-w-0 items-center" aria-label="Ir para o início">
           <img
@@ -31,6 +39,7 @@ export function SiteHeader({
             width={2048}
             height={683}
             className="h-[3.25rem] w-auto max-w-[180px] object-contain transition-transform duration-300 group-hover:scale-[1.03] sm:h-14 sm:max-w-[200px]"
+            style={{ backgroundColor: "#080a0e" }}
           />
         </a>
 
@@ -58,7 +67,8 @@ export function SiteHeader({
         <button
           type="button"
           onClick={() => setOpen((value) => !value)}
-          className="flex size-11 shrink-0 items-center justify-center border border-dark-border text-dark-foreground transition-colors hover:border-flame hover:text-flame lg:hidden"
+          className="flex size-11 shrink-0 items-center justify-center border transition-colors hover:border-flame hover:text-flame lg:hidden"
+          style={{ borderColor: "rgba(255,255,255,0.18)", color: "#ffffff" }}
           aria-label={open ? "Fechar menu" : "Abrir menu"}
           aria-expanded={open}
         >
@@ -68,7 +78,8 @@ export function SiteHeader({
 
       {open && (
         <nav
-          className="border-t border-dark-border bg-dark px-5 py-5 lg:hidden"
+          className="border-t px-5 py-5 lg:hidden"
+          style={{ backgroundColor: "#080a0e", borderColor: "rgba(255,255,255,0.14)" }}
           aria-label="Navegação para celular"
         >
           <div className="mx-auto flex max-w-7xl flex-col">
